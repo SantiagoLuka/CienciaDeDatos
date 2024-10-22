@@ -1,0 +1,47 @@
+# analisis de cluster jerarquicos
+
+# Paso 1: Cargar las librerías necesarias
+library(ggplot2)   # Para visualizaciones
+library(factoextra)  # Para la visualización del dendrograma
+
+# Paso 2: Cargar el dataset USArrests
+data("USArrests")
+df <- USArrests  # Guardamos el dataset en una variable
+df
+
+# Paso 3: Estandarizar los datos (opcional pero recomendable)
+df_scaled <- scale(df)
+df_scaled
+
+# Paso 4: Calcular la matriz de distancias
+dist_matrix <- dist(df_scaled, method = "euclidean")  # Usamos distancia euclidiana
+fviz_dist(dist_matrix, gradient = list(low = "blue", mid = "yellow", high = "red"))
+
+# Paso 5: Aplicar el algoritmo de clustering jerárquico
+hc_complete <- hclust(dist_matrix, method = "complete")  # Método de enlace completo
+hc_complete
+str(hc_complete)
+
+# Paso 6: Visualización del dendrograma
+fviz_dend(hc_complete, k = 4,  # Elegimos 4 clusters como ejemplo
+          cex = 0.7,  # Tamaño del texto de las etiquetas
+          k_colors = "jco",  # Paleta de colores
+          rect = TRUE,  # Dibujar rectángulos alrededor de los clusters
+          rect_border = "jco",  # Color de los bordes
+          rect_fill = TRUE)  # Rellenar los rectángulos de clusters
+
+# Paso 7: Cortar el dendrograma en 4 clusters
+clusters <- cutree(hc_complete, k = 4)
+
+# Paso 8: Añadir los clusters al dataset original
+df$Cluster <- as.factor(clusters)
+df$Cluster
+df
+
+# Paso 9: Visualización adicional con ggplot2
+# Visualizamos los clusters en base a 'Assault' y 'Murder'
+ggplot(df, aes(Assault, Murder, color = Cluster)) +
+  geom_point(size = 3) +
+  labs(title = "Resultados del Clustering Jerárquico (USArrests)",
+       x = "Número de Asaltos por 100,000 habitantes",
+       y = "Número de Asesinatos por 100,000 habitantes")
