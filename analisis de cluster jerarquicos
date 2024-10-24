@@ -1,4 +1,4 @@
-# analisis de cluster jerarquicos
+# analisis de cluster jerarquicos Rstudio
 
 # Paso 1: Cargar las librerías necesarias
 library(ggplot2)   # Para visualizaciones
