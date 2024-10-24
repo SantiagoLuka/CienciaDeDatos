@@ -1,0 +1,38 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.spatial.distance import pdist
+from scipy.cluster.hierarchy import fcluster
+
+# Cargar el dataset USArrests (asumo que te referías a este)
+usarrests = sns.load_dataset('USArrests')
+
+# Llenar los valores nulos si es necesario (en este caso no lo es, pero es una buena práctica)
+usarrests = usarrests.dropna()
+
+# Normalizar los datos para evitar que una variable domine el análisis
+usarrests_normalized = (usarrests - usarrests.mean()) / usarrests.std()
+
+# Crear la matriz de distancias
+dist_matrix = pdist(usarrests_normalized, metric='euclidean')
+
+# Realizar el análisis de clúster jerárquico utilizando el método 'ward'
+Z = linkage(dist_matrix, method='ward')
+
+# Dibujar el dendrograma
+plt.figure(figsize=(10, 7))
+plt.title("Dendrograma del Clúster Jerárquico - USArrests")
+dendrogram(Z, labels=usarrests.index, leaf_rotation=90, leaf_font_size=10)
+plt.xlabel("Estados")
+plt.ylabel("Distancia")
+plt.show()
+
+# Opcional: Asignar clusters a los datos (aquí se usa un corte de 4 clusters)
+clusters = fcluster(Z, t=4, criterion='maxclust')
+
+# Agregar la asignación de clusters al DataFrame original
+usarrests['Cluster'] = clusters
+
+# Mostrar los primeros 10 estados y sus clusters asignados
+print(usarrests.head(10))
