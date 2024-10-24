@@ -1,4 +1,4 @@
-# análisis de k-means, usarrest datos
+# análisis de k-means, datos usarrest Rstudio
 
 # Paso 1: Cargar las librerías necesarias
 library(ggplot2)   # Para visualizaciones
