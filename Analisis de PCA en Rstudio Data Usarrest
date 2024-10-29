@@ -1,0 +1,46 @@
+#Paso 1: Cargar y explorar los datos
+# Cargar la data USArrests
+data("USArrests")
+
+# Visualizar las primeras filas de la data
+head(USArrests)
+
+# Obtener un resumen de los datos
+summary(USArrests)
+
+#Paso 2: Escalar los datos
+# Escalar la data
+usarrests_scaled <- scale(USArrests)
+usarrests_scaled
+
+#Paso 3: Realizar el Análisis de Componentes Principales (PCA)
+# Realizar el análisis de componentes principales
+pca_result <- prcomp(usarrests_scaled, center = TRUE, scale. = TRUE)
+pca_result
+
+#Paso 4: Resumir los resultados del PCA
+# Resumen de los resultados
+summary(pca_result)
+
+#Paso 5: Examinar las cargas de cada componente principal
+# Matriz de carga
+pca_result$rotation
+
+#Paso 6: Graficar un Scree Plot
+# Graficar el Scree Plot
+screeplot(pca_result, type = "lines", main = "Scree Plot")
+
+#Paso 7: Biplot de PCA
+# Biplot de PCA
+biplot(pca_result, scale = 0)
+
+#Paso 8: Graficar la Varianza Explicada Acumulada
+# Calcular la varianza explicada acumulada
+explained_variance <- cumsum(pca_result$sdev^2 / sum(pca_result$sdev^2))
+explained_variance
+
+# Graficar la varianza explicada acumulada
+plot(explained_variance, xlab = "Número de Componentes", ylab = "Varianza Explicada Acumulada",
+     type = "b", main = "Varianza Explicada Acumulada")
+
+#Paso 9: Interpretar los resultados
